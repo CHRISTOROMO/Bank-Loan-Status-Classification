@@ -9,31 +9,31 @@ class Data:
     def __init__(self, url):
         self.url = url
         self.data = pd.read_csv(self.url, sep=",")
-
+    print("==========================================================")
     def loading_data(self):
         return self.data
-
+    print("==========================================================")
     def data_shape(self):
         return f'The dataset has {self.data.shape[0]} rows and {self.data.shape[1]} columns'
-
+    print("==========================================================")
     def data_types(self):
         return self.data.dtypes
-
+    print("==========================================================")
     def data_info(self):
         return self.data.info()
-
+    print("==========================================================")
     def data_describe(self):
         return self.data.describe()
-
+    print("==========================================================")
     def data_head(self):
         return self.data.head()
-
+    print("==========================================================")
     def data_tail(self):
         return self.data.tail()
-
+    print("==========================================================")
     def data_columns(self):
         return self.data.columns
-
+    print("==========================================================")
     def print_results(self):
         print('Loading the data...')
         print('='*50)
