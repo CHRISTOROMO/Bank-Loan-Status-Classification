@@ -1,0 +1,154 @@
+---
+title: "PCA"
+author: "William"
+date: '2022-06-08'
+output: html_document
+---
+
+Diab dataset represent attributes with women who have cancer and those who don't based on the attributes given.
+
+
+```{r}
+#calling the libraries
+library(factoextra)
+library(ggplot2)
+library(corrplot)
+#
+#loading the dataset
+diab<-read.csv("C:\\Users\\HP 840 G3 i7\\Downloads\\diabetes.csv",header=T)
+
+```
+
+```{r}
+#previewing the 1st 6 rows
+head(diab)
+```
+```{r}
+#getting attribute records/values
+a <-diab$Glucose
+head(a)
+```
+```{r}
+#using attach function
+attach(diab)
+```
+
+```{r}
+#getting the attributes value
+a <-Glucose
+head(a)
+```
+```{r}
+#statistics summary using summary()
+summary(diab)
+```
+
+```{r}
+#stat using describe()
+library(psych)
+
+```
+
+```{r}
+describe(diab)
+```
+
+
+```{r}
+#checking the shape(dimension)
+dim(diab)
+```
+
+```{r}
+#running our principal component
+# scale=T(True) means we use correlation matrix to calculate the PCA. if scale= F(False) then we use covariance matrix to calculate PCA.
+# we use covariance(scale=F)when all the unit of our attributes are the same.
+#we use correlation(scale=T) when the unit of our attributes are different.
+diab.pca=prcomp(diab,scale=T)
+```
+
+
+```{r}
+#checking the possible things we can get from running principal component(PC)
+var=get_pca_var(diab.pca)
+var
+
+```
+Observations:
+
+coord >>> coordinate of the variables
+cor >> correlation
+cos2 >> how well is the attribute represented in each PC.
+contrib >> how well each attribute/variable contribte to PC. 
+
+
+```{r}
+#getting the Eigenvalues
+eig.val=get_eigenvalue(diab.pca)
+eig.val
+```
+
+observation: 
+
+5 PC accounts for 77.48% of the data
+
+
+```{r}
+#Plotting the PC
+fviz_eig(diab.pca, addlabels = T, ylim = c(0, 30))
+```
+Observation: It shows the % of each PC
+depending on how confidence we're we can stop at PC3 which explains 58% of the variance.
+
+
+```{r}
+#Using visualization to check the contribution. this is difficult to interpret.
+fviz_pca_var(diab.pca, col.var = "blue")
+```
+
+
+```{r}
+#Plotting the contribution of attributes in each PC
+fviz_contrib(diab.pca,choice = "var", axes = 1)
+fviz_contrib(diab.pca, choice = "var", axes = 2)
+fviz_contrib(diab.pca, choice = "var", axes = 3)
+fviz_contrib(diab.pca, choice = "var", axes = 4)
+```
+Observation: 
+
+Dim1: Glucose, outcome, bmi, and insulin contribute the most in PC1
+dim2: Age, pregnancy, skin thickness and insulin contribute the most.  
+
+other Dims can be checked too...
+
+These can be checked using corr plot as well.
+
+
+
+```{r}
+#checking attribute contribution using corr plot
+corrplot(var$cos2, is.corr=FALSE)# u can also use is.corr=F
+```
+Observation:
+
+Dim1 is a good presentation of outcome, BMI, and glucos
+Dim2 is a good presentation of age, skin thickness, and pregrancies
+Dim3 is a good presentation of blodd presure
+Dim4 is a good presentation of DiabetesPedigreeFunction
+
+This can still be got using the below code
+```{r}
+#Attribute contribution
+corrplot(var$contrib, is.corr=F) 
+```
+
+```{r}
+#checking the PC values
+#this is a bit messy and abit confusing to interpret thus people prefer using visual representaion alredy done above.
+diab.pca
+```
+
+Observations:
+PC1: a decrease in glucose, a decrease in bmi, and a decrease in insulin leads to a decrease in the persons outcome.
+PC2: an increase in age, pregnancy we have decrease in skin thickness and a decrease in insulin. this means the values are correlated in some way(inverse correlation).
+Pc3: there's a relationship btn bllod pressure, outcome and glucose. i.e. glose goes up when blood pressure comes down.
